@@ -1,0 +1,28 @@
+service: resource-dynamodb
+
+custom:
+  # Our stage is based on what is passed in when running serverless
+  # commands. Or fallbacks to what we have set in the provider section.
+  stage: ${opt:stage, self:provider.stage}
+  # Set the table name here so we can use it while testing locally
+
+provider:
+  name: aws
+  stage: ${opt:stage, self:provider.stage}
+  region: us-east-1
+
+resources:
+  Resources:
+    ExampleTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ExampleTable
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 10
+          WriteCapacityUnits: 1
